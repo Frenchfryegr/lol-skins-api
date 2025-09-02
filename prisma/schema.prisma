@@ -21,17 +21,85 @@ model User {
   password String @unique
 }
 
-model Champion {
-  id Int @id  
-  name String 
-  title String
+// model Champion {
+//   id Int @id  
+//   name String 
+//   title String
 
-  Skin Skin[]
+//   Skin Skin[]
+// }
+
+// model Skin {
+//   id Int @id
+//   name String 
+//   championId Int
+//   champion Champion @relation(fields: [championId], references: [id])
+// }
+
+model Champion {
+  id                  Int      @id
+  name                String
+  alias               String
+  title               String
+  shortBio            String?
+  roles               String[] 
+  tacticalInfo        Json?
+  playstyleInfo       Json?
+  championTagInfo     Json?
+  assets              Json?    
+  passive             Json?
+  spells              Json?
+  skins               Skin[]
 }
 
 model Skin {
-  id Int @id
-  name String 
-  championId Int
-  champion Champion @relation(fields: [championId], references: [id])
+  id                   Int       @id
+  championId           Int
+  champion             Champion  @relation(fields: [championId], references: [id])
+  contentId            String?
+  isBase               Boolean
+  name                 String
+  skinClassification   String?
+  rarity               String?
+  isLegacy             Boolean?
+  splashPath           String?
+  uncenteredSplashPath String?
+  tilePath             String?
+  loadScreenPath       String?
+  loadScreenVintagePath String?
+  skinType             String?
+  splashVideoPath      String?
+  previewVideoUrl      String?
+  collectionSplashVideoPath String?
+  collectionCardHoverVideoPath String?
+  featuresText         String?
+  chromaPath           String?
+  emblems              Json?
+  regionRarityId       Int?
+  rarityGemPath        String?
+  description          String?
+  chromas              Chroma[]
+  skinLines            SkinLine[] // implicit many-to-many
+}
+
+model Chroma {
+  id                 Int   @id
+  skinId             Int
+  skin               Skin  @relation(fields: [skinId], references: [id])
+  name               String?
+  contentId          String?
+  skinClassification String?
+  chromaPath         String?
+  tilePath           String?
+  colors             String[] // hexes
+  descriptions       Json?
+  description        String?
+  rarities           Json?
+}
+
+model SkinLine {
+  id          Int    @id
+  name        String?
+  description String?
+  skins       Skin[] // implicit many-to-many
 }

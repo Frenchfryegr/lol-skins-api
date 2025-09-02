@@ -19,7 +19,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
+    "@nestjs/axios": "^4.0.1",
+    "@nestjs/cache-manager": "^3.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
@@ -28,7 +33,11 @@
     "@prisma/client": "^6.15.0",
     "@swc/cli": "^0.7.8",
     "@swc/core": "^1.13.5",
+    "axios": "^1.11.0",
+    "cache-manager": "^7.2.0",
+    "cache-manager-redis-store": "^3.0.1",
     "prisma": "^6.15.0",
+    "redis": "^5.8.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

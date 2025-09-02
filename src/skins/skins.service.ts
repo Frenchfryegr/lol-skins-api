@@ -1,22 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSkinDto } from './dto/create-skin.dto';
-import { UpdateSkinDto } from './dto/update-skin.dto';
+import { Skin } from './entities/skin.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SkinsService {
-  create(createSkinDto: CreateSkinDto) {
+  constructor(private prismaService: PrismaService) {}
+
+  create(skin: Skin) {
     return 'This action adds a new skin';
   }
 
   findAll() {
-    return `This action returns all skins`;
+    return this.prismaService.findAllSkins();
+  }
+
+  findSkinSplashArt(id: number) {
+    return "WIP";
+    // return this.prismaService.findSkinTileArt(id)
+  }
+
+  findSkinTileArt(id: number) {
+    return this.prismaService.findSkinTileArt(id)
+  }
+
+  findChampBaseSkinArt(champId: number) {
+    return this.prismaService.findChampBaseSkinArt(champId)
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} skin`;
+    return this.prismaService.findSkin(id);
   }
 
-  update(id: number, updateSkinDto: UpdateSkinDto) {
+  update(id: number, skin: Skin) {
     return `This action updates a #${id} skin`;
   }
 

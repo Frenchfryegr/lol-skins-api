@@ -1,20 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res } from '@nestjs/common';
+import { type Response } from 'express';
+
 import { ChampionsService } from './champions.service';
-import { CreateChampionDto } from './dto/create-champion.dto';
-import { UpdateChampionDto } from './dto/update-champion.dto';
+import { Champion } from './entities/champion.entity';
 
 @Controller('champions')
 export class ChampionsController {
   constructor(private readonly championsService: ChampionsService) {}
 
-  @Post()
-  create(@Body() createChampionDto: CreateChampionDto) {
-    return this.championsService.create(createChampionDto);
-  }
-
   @Get()
-  findAll() {
-    return this.championsService.findAll();
+  findAll(@Query('verbose') verbose?: boolean) {
+    return this.championsService.findAll(verbose);
   }
 
   @Get(':id')
@@ -22,13 +18,32 @@ export class ChampionsController {
     return this.championsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChampionDto: UpdateChampionDto) {
-    return this.championsService.update(+id, updateChampionDto);
+  @Get(':id/skins')
+  findSkins(@Param('id') id: string, @Query('verbose') verbose?: boolean) {
+    return this.championsService.findAllSkinsForChampion(+id, verbose);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.championsService.remove(+id);
+
+  @Get(':id/base')
+  async findChampBaseSkin(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const champId = parseInt(id);
+      const imageData = await this.championsService.findChampBaseSkinArt(champId);
+      
+      this.setUpImageHeaders(res, imageData)
+      
+    } catch (error) {
+      res.status(404).send(`Image not found: ${error.message}`);
+    }
   }
+
+  private setUpImageHeaders(res: Response, imageData: {data: Buffer, contentType: string}) {
+    // set headers for image response and send image buffer
+    res.setHeader('Content-Type', imageData.contentType);
+    res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+    res.setHeader('Content-Length', imageData.data.length);
+    
+    res.send(imageData.data);
+}
+
 }
