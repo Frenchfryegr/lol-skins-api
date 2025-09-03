@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res, UseGuards } from '@nestjs/common';
 import { type Response } from 'express';
 
 import { ChampionsService } from './champions.service';
 import { Champion } from './entities/champion.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('champions')
 export class ChampionsController {
