@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     // origin: 'http://localhost:4200', 
-    origin: 'https://lol-skins-api.onrender.com',
+    origin: 'https://lol-skins-tracker.onrender.com',
     credentials: true,
   });
   await app.listen(process.env.PORT ?? 3000);
