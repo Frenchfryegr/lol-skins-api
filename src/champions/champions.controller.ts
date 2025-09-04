@@ -5,6 +5,8 @@ import { ChampionsService } from './champions.service';
 import { Champion } from './entities/champion.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+import { Public } from 'src/auth/public.decorator';
+
 @Controller('champions')
 export class ChampionsController {
   constructor(private readonly championsService: ChampionsService) {}
@@ -25,6 +27,7 @@ export class ChampionsController {
   }
 
 
+  @Public()
   @Get(':id/base')
   async findChampBaseSkin(@Param('id') id: string, @Res() res: Response) {
     try {
