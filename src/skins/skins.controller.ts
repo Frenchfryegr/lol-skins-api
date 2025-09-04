@@ -3,8 +3,11 @@ import { type Response } from 'express';
 import { SkinsService } from './skins.service';
 import axios from 'axios';
 
+import { Public } from 'src/auth/public.decorator';
+
 import { Skin } from './entities/skin.entity';
 
+@Public() //TEMPORARY FIX: REMOVE ME
 @Controller('skins')
 export class SkinsController {
   constructor(private readonly skinsService: SkinsService) {}
@@ -28,7 +31,7 @@ export class SkinsController {
   findSkinSplash(@Param('id') id: string) {
     return this.skinsService.findSkinSplashArt(+id)
   }
-
+  
   @Get(':id/tile')
   async findSkinTile(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -42,15 +45,6 @@ export class SkinsController {
     }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() skin: Skin) {
-    return this.skinsService.update(+id, skin);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.skinsService.remove(+id);
-  }
 
   private setUpImageHeaders(res: Response, imageData: {data: Buffer, contentType: string}) {
       // set headers for image response and send image buffer
